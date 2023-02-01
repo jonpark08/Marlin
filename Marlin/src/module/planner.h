@@ -50,8 +50,6 @@
   #include "delta.h"
 #elif ENABLED(POLARGRAPH)
   #include "polargraph.h"
-#elif ENABLED(POLAR)
-  #include "polar.h"
 #endif
 
 #if ABL_PLANAR
@@ -293,7 +291,7 @@ typedef struct PlannerBlock {
 
 } block_t;
 
-#if ANY(LIN_ADVANCE, FEEDRATE_SCALING, GRADIENT_MIX, LCD_SHOW_E_TOTAL, POWER_LOSS_RECOVERY)
+#if ANY(LIN_ADVANCE, SCARA_FEEDRATE_SCALING, GRADIENT_MIX, LCD_SHOW_E_TOTAL, POWER_LOSS_RECOVERY)
   #define HAS_POSITION_FLOAT 1
 #endif
 
@@ -363,7 +361,7 @@ typedef struct {
 
 struct PlannerHints {
   float millimeters = 0.0;            // Move Length, if known, else 0.
-  #if ENABLED(FEEDRATE_SCALING)
+  #if ENABLED(SCARA_FEEDRATE_SCALING)
     float inv_duration = 0.0;         // Reciprocal of the move duration, if known
   #endif
   #if ENABLED(HINTS_CURVE_RADIUS)
@@ -915,8 +913,8 @@ class Planner {
       return out;
     }
 
-    // SCARA AB and Polar YB axes are in degrees, not mm
-    #if EITHER(IS_SCARA, POLAR)
+    // SCARA AB axes are in degrees, not mm
+    #if IS_SCARA
       FORCE_INLINE static float get_axis_position_degrees(const AxisEnum axis) { return get_axis_position_mm(axis); }
     #endif
 

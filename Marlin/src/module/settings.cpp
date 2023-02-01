@@ -166,7 +166,7 @@
   #include "../feature/fancheck.h"
 #endif
 
-#if DGUS_LCD_UI_MKS
+#if ENABLED(DGUS_LCD_UI_MKS)
   #include "../lcd/extui/dgus/DGUSScreenHandler.h"
   #include "../lcd/extui/dgus/DGUSDisplayDef.h"
 #endif
@@ -569,7 +569,7 @@ typedef struct SettingsDataStruct {
   //
   // MKS UI controller
   //
-  #if DGUS_LCD_UI_MKS
+  #if ENABLED(DGUS_LCD_UI_MKS)
     MKS_Language mks_language_index;                    // Display Language
     xy_int_t mks_corner_offsets[5];                     // Bed Tramming
     xyz_int_t mks_park_pos;                             // Custom Parking (without NOZZLE_PARK)
@@ -1614,7 +1614,7 @@ void MarlinSettings::postprocess() {
     //
     // MKS UI controller
     //
-    #if DGUS_LCD_UI_MKS
+    #if ENABLED(DGUS_LCD_UI_MKS)
       EEPROM_WRITE(mks_language_index);
       EEPROM_WRITE(mks_corner_offsets);
       EEPROM_WRITE(mks_park_pos);
@@ -1632,7 +1632,8 @@ void MarlinSettings::postprocess() {
     // Model predictive control
     //
     #if ENABLED(MPCTEMP)
-      HOTEND_LOOP() EEPROM_WRITE(thermalManager.temp_hotend[e].mpc);
+      HOTEND_LOOP()
+        EEPROM_WRITE(thermalManager.temp_hotend[e].constants);
     #endif
 
     //
@@ -2526,7 +2527,7 @@ void MarlinSettings::postprocess() {
       #endif
 
       //
-      // DWIN User Data
+      // Creality DWIN User Data
       //
       #if ENABLED(DWIN_LCD_PROUI)
       {
@@ -2601,7 +2602,7 @@ void MarlinSettings::postprocess() {
       //
       // MKS UI controller
       //
-      #if DGUS_LCD_UI_MKS
+      #if ENABLED(DGUS_LCD_UI_MKS)
         _FIELD_TEST(mks_language_index);
         EEPROM_READ(mks_language_index);
         EEPROM_READ(mks_corner_offsets);
@@ -2626,7 +2627,8 @@ void MarlinSettings::postprocess() {
       //
       #if ENABLED(MPCTEMP)
       {
-        HOTEND_LOOP() EEPROM_READ(thermalManager.temp_hotend[e].mpc);
+        HOTEND_LOOP()
+          EEPROM_READ(thermalManager.temp_hotend[e].constants);
       }
       #endif
 
@@ -2850,7 +2852,7 @@ void MarlinSettings::postprocess() {
         #endif
 
         #if ENABLED(DWIN_LCD_PROUI)
-          status = !bedLevelTools.meshvalidate();
+          status = !BedLevelTools.meshvalidate();
           if (status) {
             bedlevel.invalidate();
             LCD_MESSAGE(MSG_UBL_MESH_INVALID);
@@ -3414,15 +3416,15 @@ void MarlinSettings::reset() {
     static_assert(COUNT(_filament_heat_capacity_permm) == HOTENDS, "FILAMENT_HEAT_CAPACITY_PERMM must have HOTENDS items.");
 
     HOTEND_LOOP() {
-      MPC_t &mpc = thermalManager.temp_hotend[e].mpc;
-      mpc.heater_power = _mpc_heater_power[e];
-      mpc.block_heat_capacity = _mpc_block_heat_capacity[e];
-      mpc.sensor_responsiveness = _mpc_sensor_responsiveness[e];
-      mpc.ambient_xfer_coeff_fan0 = _mpc_ambient_xfer_coeff[e];
+      MPC_t &constants = thermalManager.temp_hotend[e].constants;
+      constants.heater_power = _mpc_heater_power[e];
+      constants.block_heat_capacity = _mpc_block_heat_capacity[e];
+      constants.sensor_responsiveness = _mpc_sensor_responsiveness[e];
+      constants.ambient_xfer_coeff_fan0 = _mpc_ambient_xfer_coeff[e];
       #if ENABLED(MPC_INCLUDE_FAN)
-        mpc.fan255_adjustment = _mpc_ambient_xfer_coeff_fan255[e] - _mpc_ambient_xfer_coeff[e];
+        constants.fan255_adjustment = _mpc_ambient_xfer_coeff_fan255[e] - _mpc_ambient_xfer_coeff[e];
       #endif
-      mpc.filament_heat_capacity_permm = _filament_heat_capacity_permm[e];
+      constants.filament_heat_capacity_permm = _filament_heat_capacity_permm[e];
     }
   #endif
 

@@ -444,7 +444,7 @@ FORCE_INLINE void _draw_axis_value(const AxisEnum axis, const char *value, const
 }
 
 // Prepare strings for progress display
-#if HAS_EXTRA_PROGRESS
+#if HAS_PRINT_PROGRESS
   static MarlinUI::progress_t progress = 0;
   static char bufferc[13];
 

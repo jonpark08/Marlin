@@ -168,6 +168,7 @@ bool TFT_FSMC::isBusy() {
 void TFT_FSMC::Abort() {
   HAL_DMA_Abort(&DMAtx);  // Abort DMA transfer if any
   HAL_DMA_DeInit(&DMAtx); // Deconfigure DMA
+  TERN_(GD32, while (isBusy()));
 }
 
 void TFT_FSMC::TransmitDMA(uint32_t MemoryIncrease, uint16_t *Data, uint16_t Count) {

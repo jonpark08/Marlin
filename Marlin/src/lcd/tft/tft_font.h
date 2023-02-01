@@ -37,4 +37,5 @@ extern const uint8_t SYMBOLS_FONT_NAME[];
   extern const uint8_t EXTRA_FONT_NAME[];
 #endif
 
+
 #endif // HAS_GRAPHICAL_TFT

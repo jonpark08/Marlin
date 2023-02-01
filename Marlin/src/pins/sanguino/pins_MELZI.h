@@ -29,8 +29,6 @@
   #define BOARD_INFO_NAME "Melzi"
 #endif
 
-#define IS_MELZI 1
-
 #ifndef FAN_PIN
   #define FAN_PIN                              4
 #endif

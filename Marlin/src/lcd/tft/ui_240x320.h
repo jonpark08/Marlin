@@ -1,6 +1,6 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (c) 2023 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (c) 2020 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
  * Copyright (c) 2011 Camiel Gubbels / Erik van der Zalm
@@ -21,16 +21,27 @@
  */
 #pragma once
 
-/**
- * polar.h - POLAR-specific functions
- */
+#define MARLIN_LOGO_FULL_SIZE MarlinLogo320x240x16
 
-#include "../core/types.h"
+#include "ui_common.h"
 
-extern float segments_per_second;
+#define TFT_STATUS_TOP_Y       0
+#define TFT_TOP_LINE_Y         2
 
-float absoluteAngle(float a);
-void forward_kinematics(const_float_t r, const_float_t theta);
+#define MENU_TEXT_X_OFFSET    10
+#define MENU_TEXT_Y_OFFSET    tft_string.vcenter(MENU_ITEM_HEIGHT)
 
-void inverse_kinematics(const xyz_pos_t &raw);
-void polar_report_positions();
+#define MENU_ITEM_ICON_X       0
+#define MENU_ITEM_ICON_Y       0
+#define MENU_ITEM_ICON_SPACE  32
+
+#define MENU_ITEM_HEIGHT      32
+#define MENU_LINE_HEIGHT      (MENU_ITEM_HEIGHT + 2)
+
+  #if (TFT_FONT == NOTOSANS) || (TFT_FONT == HELVETICA)
+    #define FONT_SIZE           14
+  #elif TFT_FONT == UNIFONT
+    #define FONT_SIZE           10
+  #endif
+
+#include "tft_font.h"

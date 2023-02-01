@@ -32,8 +32,6 @@
 
 #if IS_SCARA
   #include "scara.h"
-#elif ENABLED(POLAR)
-  #include "polar.h"
 #endif
 
 // Error margin to work around float imprecision
